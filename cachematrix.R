@@ -4,6 +4,7 @@
 ##     get/set/getInv/setInv
 ## Second function uses that special vector to return cached inverse 
 ## or calculate, cache and return inverse.
+## Though this function is very similar to example code, it is written with understanding.
 
 ## The first function, makeCacheMatrix creates a special "vector", which 
 ## is really a list containing a function to
@@ -18,13 +19,12 @@ makeCacheMatrix <- function(x = matrix()) {
                 inv <<- NULL
         }
         get <- function() x
-        setInv <- function(mInv) inv <<- mInv
-        getInv <- function() inv
+        setInverse <- function(mInv) inv <<- mInv
+        getInverse <- function() inv
         list(set = set, get = get,
-             setInv = setInv,
-             getInv = getInv)
+             setInverse = setInverse,
+             getInverse = getInverse)
 }
-
 
 ## The following function calculates the inverse of the special "vector" 
 ## created with the above function. Since solve function is expensive, 
@@ -34,13 +34,13 @@ makeCacheMatrix <- function(x = matrix()) {
 ##    Else calculate and cache the inverse of the data via setInv and return.
 
 cacheSolve <- function(x, ...) {
-        m <- x$getInv()
+        m <- x$getInverse()
         if(!is.null(m)) {
                 message("getting cached data")
 	                 return(m)
         }
         data <- x$get()
         m <- solve(data, ...)
-        x$setInv(m)
+        x$setInverse(m)
         m
 }
